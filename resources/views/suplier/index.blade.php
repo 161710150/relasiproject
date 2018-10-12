@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables</h1>
+            <h1>Data Tables Suplier</h1>
           </div>
           <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -24,8 +24,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h1 class="card-title">Data Table</h1>
-              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 960px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
+              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 1120px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

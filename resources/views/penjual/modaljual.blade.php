@@ -21,16 +21,19 @@
                   <div class="form-group">
                      <label>Kode Penjualan</label>
                      <input type="text" name="Kode_Penjualan" id="Kode_Penjualan" class="form-control" placeholder="masukan kode barang">
+                     <span class="help-block has-error Kode_Penjualan_error"></span>
                   </div>
 
                   <div class="form-group">
                      <label>Tanggal Jual</label>
                      <input type="date" name="Tanggal_Jual" id="Tanggal_Jual" class="form-control">
+                     <span class="help-block has-error Tanggal_Jual_error"></span>
                   </div>
 
                   <div class="form-group">
                      <label>Nama Pelanggan</label>
                      <input type="text" name="Nama_Pelanggan" id="Nama_Pelanggan" class="form-control" placeholder="masukan nama anda">
+                     <span class="help-block has-error Nama_Pelanggan_error"></span>
                   </div>
                
                   <div class="form-group {{ $errors->has('Barang_id') ? 'has-error' : '' }}">
@@ -47,7 +50,7 @@
 
                   <div class="form-group">
                   	<label>Jumlah</label>
-                  	<input type="text" id="Jumlah" name="Jumlah" class="form-control" placeholder="masukan jumlah">
+                  	<input type="number" id="Jumlah" name="Jumlah" class="form-control" placeholder="masukan jumlah minimal 1">
                   	<span class="help-block has-error Jumlah_error"></span>
                   </div>
 

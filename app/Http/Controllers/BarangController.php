@@ -17,6 +17,9 @@ class BarangController extends Controller
         ->addColumn('supliername', function($barang){
             return $barang->suplier->Nama;
         })
+        ->addColumn('formatharga', function($barang){
+            return number_format($barang->Harga_Satuan,2,',','.');
+        })
         ->addColumn('action', function($barang){
             return '<a href="#" class="btn btn-xs btn-primary edit" data-id="'.$barang->id.'">
             <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;
@@ -24,7 +27,7 @@ class BarangController extends Controller
             <i class="glyphicon glyphicon-remove"></i> Delete</a>';
 
             })
-        ->rawColumns(['action','supliername'])->make(true);
+        ->rawColumns(['action','supliername','formatharga'])->make(true);
     }
     /**
      * Display a listing of the resource.
@@ -60,13 +63,14 @@ class BarangController extends Controller
             'Nama_Barang' => 'required',
             'Merk' => 'required',
             'Harga_Satuan' => 'required',
-            'Stok' => 'required',
+            'Stok' => 'required|not_in:0',
         ],[
             'suplier_id.required' => 'suplier_id Tidak Boleh Kosong',
             'Nama_Barang.required' => 'Nama Barang Harus Diisi',
             'Merk.required' => 'Merk Tidak Boleh Kosong',
             'Harga_Satuan.required' => 'Harga Harus Diisi',
             'Stok.required' => 'Stok Harus Diisi',
+            'Stok.not_in' => 'Tidak Dapat Menginput',
         ]);
         $data = new Barang;
         $data->suplier_id = $request->suplier_id;
@@ -115,13 +119,14 @@ class BarangController extends Controller
             'Nama_Barang' => 'required',
             'Merk'=>'required',
             'Harga_Satuan' => 'required',
-            'Stok' => 'required',
+            'Stok' => 'required|not_in:0',
         ],[
             'suplier_id.required' => 'suplier_id Tidak Boleh Kosong',
             'Nama_Barang.required' => 'Harus Diisi',
             'Merk.required' => 'Tidak Boleh Kosong',
             'Harga_Satuan.required' => 'Tidak Boleh Kosong',
             'Stok.required' => 'Tidak Boleh Kosong',
+            'Stok.not_in' => 'Minimal 1',
         ]);
         $barang = Barang::findOrFail($id);
         $barang->suplier_id = $request->suplier_id;

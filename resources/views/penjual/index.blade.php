@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables</h1>
+            <h1>Data Tables Penjualan</h1>
           </div>
           <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -24,8 +24,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header" style="margin-bottom: 15px">
-              <h1 class="card-title">Data Table</h1>
-              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 960px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
+              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 1120px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
             </div>
               <div class="panel panel-body">
                  <table id="jual_table" class="table table-bordered" style="width:100%">
@@ -73,7 +72,7 @@
 
             $('#jualModal').modal('show');
             $('.modal-title').text('Add Data');
-            $('#aksi').val('Tambah');
+            $('#aksi').val('Simpan');
             $('.select-dua').select2();
             state = "insert";
 
@@ -163,6 +162,13 @@
                   $('#jual_table').DataTable().ajax.reload();
                 },
                 error: function (data){
+                  $('#jualModal').modal('show');
+                  swal({
+                    title: 'Update error',
+                    text: 'tidak terpenuhi',
+                    type: 'error',
+                    timer: '3500'
+                  })
                   $('input').on('keydown keypress keyup click change', function(){
                   $(this).parent().removeClass('has-error');
                   $(this).next('.help-block').hide()
@@ -175,7 +181,6 @@
                     $('input[name='+name+']').parent().addClass('has-error');
                     $('input[name='+name+']').next('.help-block').show().text(value);
                   });
-
                   $('input[name='+coba[0]+']').focus();
                 }
              });
@@ -205,7 +210,7 @@
 
 
                   $('#jualModal').modal('show');
-                  $('#aksi').val('Simpan');
+                  $('#aksi').val('Update');
                   $('.modal-title').text('Edit Data');
                 }
               });

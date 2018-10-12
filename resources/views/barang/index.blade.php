@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables</h1>
+            <h1>Data Tables Barang</h1>
           </div>
           <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -24,8 +24,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header" style="margin-bottom: 15px">
-              <h1 class="card-title">Data Table</h1>
-              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 960px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
+              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 1120px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
             </div>
             <div class="panel panel-body">
                <table id="bar_table" class="table table-bordered" style="width:100%">
@@ -62,7 +61,7 @@
             { data: 'supliername' },
             { data: 'Nama_Barang', name: 'Nama_Barang' },
             { data: 'Merk', name: 'Merk' },
-            { data: 'Harga_Satuan', name: 'Harga_Satuan' },
+            { data: 'formatharga', name: 'formatharga' },
             { data: 'Stok', name: 'Stok'},
             { data: 'action', orderable: false, searchable: false }
         ],

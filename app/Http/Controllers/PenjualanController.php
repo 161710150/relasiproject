@@ -58,20 +58,24 @@ class PenjualanController extends Controller
      */
     public function store(Request $request)
     {
+        $barang = Barang::where('id', $request->Barang_id)->first();
+        $stok = $barang->Stok;
         $this->validate($request, [
-            'Kode_Penjualan' => 'required',
+            'Kode_Penjualan' => 'required|min:5|max:10',
             'Tanggal_Jual' => 'required',
             'Nama_Pelanggan' => 'required',
             'Barang_id' => 'required',
-            'Jumlah' => 'required',
-            // 'Total_Bayar' => 'required',
+            'Jumlah' => "required|numeric|min:1|max:$stok",
         ],[
             'Kode_Penjualan.required' => 'Kode Penjualan Tidak Boleh Kosong',
+            'Kode_Penjualan.min' => 'minimal 5 karater',
+            'Kode_Penjualan.max' => 'maximal 10 karater',
             'Tanggal_Jual.required' => 'Harus Diisi',
             'Nama_Pelanggan.required' => 'Nama Pelanggan Tidak Boleh Kosong',
             'Barang_id.required' => 'Harga Harus Diisi',
             'Jumlah.required' => 'Jumlah Harus Diisi',
-            // 'Total_Bayar.required' => 'Harus Diisi',
+            'Jumlah.max' => 'tidak boleh melebihi stok, Stok Barang Saat Ini = '.$stok,
+            'Jumlah.min' => 'tidak boleh kurang dari 1',
         ]);
         $data = new Penjualan;
         $data->Kode_Penjualan = $request->Kode_Penjualan;
@@ -79,12 +83,13 @@ class PenjualanController extends Controller
         $data->Nama_Pelanggan = $request->Nama_Pelanggan;
         $data->Barang_id = $request->Barang_id;
         $data->Jumlah = $request->Jumlah;
-        $total = $request->Jumlah;
+
         $baru = Barang::where('id', $data->Barang_id)->first();
-        $data->Total_Bayar = $total*$baru->Harga_Satuan;
+
+        $data->Total_Bayar = $data->Jumlah*$baru->Harga_Satuan;
         $data->save();
 
-        $baru->Stok = $baru->Stok - $total;
+        $baru->Stok = $baru->Stok - $data->Jumlah;
         $baru->save();
         return response()->json(['success'=>true]);
     }
@@ -126,27 +131,54 @@ class PenjualanController extends Controller
             'Tanggal_Jual' => 'required',
             'Nama_Pelanggan' => 'required',
             'Barang_id' => 'required',
-            'Jumlah' => 'required',
-            // 'Total_Bayar' => 'required',
+            'Jumlah' => 'required|numeric|not_in:0',
         ],[
             'Kode_Penjualan.required' => 'Kode Penjualan Tidak Boleh Kosong',
             'Tanggal_Jual.required' => 'Harus Diisi',
             'Nama_Pelanggan.required' => 'Nama Pelanggan Tidak Boleh Kosong',
             'Barang_id.required' => 'Harga Harus Diisi',
             'Jumlah.required' => 'Jumlah Harus Diisi',
-            // 'Total_Bayar.required' => 'Harus Diisi',
+            'Jumlah.numeric' => 'inputan Harus berupa angka',
+            'Jumlah.not_in' => 'tidak bisa menginput',
         ]);
-        $data = Penjualan::findOrFail($id);
+        $data = Penjualan::find($id);
         $data->Kode_Penjualan = $request->Kode_Penjualan;
         $data->Tanggal_Jual = $request->Tanggal_Jual;
         $data->Nama_Pelanggan = $request->Nama_Pelanggan;
         $data->Barang_id = $request->Barang_id;
-        $data->Jumlah = $request->Jumlah;
-        $total = $request->Jumlah;
-        $baru = Barang::where('id', $data->Barang_id)->first();
-        $data->Total_Bayar = $total*$baru->Harga_Satuan;
-        $data->save();
-        return response()->json(['success'=>true]);
+
+        $baru = Barang::find($id);
+        if ($request->Jumlah <= $baru->Stok) {
+            $anyar = Penjualan::find($id);
+            $anyar->Jumlah = $anyar->Jumlah - $request->Jumlah;
+
+            $new = Barang::where('id', $data->Barang_id)->first();
+            $new->Stok = $new->Stok + $anyar->Jumlah;
+            $anyar->save();
+            $new->save();
+            $data->Jumlah = $request->Jumlah;
+
+            $data->Total_Bayar = $data->Jumlah*$baru->Harga_Satuan;
+            $data->save();
+            return response()->json(['success'=>true,'message'=>'berhasil update']);
+        }
+        elseif ($request->Jumlah > $baru->Stok)  {
+
+            $barangstok = Barang::where('id', $data->Barang_id)->first();
+            $barangstok->Stok = ($barangstok->Stok + $data->Jumlah) - $request->Jumlah;
+            $barangstok->save();
+            $data->Jumlah = $request->Jumlah;
+
+            $coba = Penjualan::find($id);
+            $coba->Jumlah = $coba->Jumlah - $request->Jumlah;
+            $coba->save();
+
+            $data->Total_Bayar = $data->Jumlah*$baru->Harga_Satuan;
+            $data->save();
+
+            return response()->json(['success'=>true,'message'=>'terpenuhi']);
+        }
+        return response()->json(['error'=>true, 'pesan'=>'tidak terpenuhi']);
     }
 
     /**
