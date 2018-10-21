@@ -27,6 +27,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="kategori" class="nav-link">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>DataTables Kategori barang</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="barang" class="nav-link">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>DataTables Barang</p>

@@ -24,13 +24,14 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header" style="margin-bottom: 15px">
-              <button type="button" name="add" id="Tambah" class="btn btn-primary pull-right" style="margin-left: 1120px; margin-top: 10px; margin-bottom: 10px">Add Data</button>
+              <button type="button" name="add" id="Tambah" class="btn btn-primary">Add Data</button>
             </div>
             <div class="panel panel-body">
                <table id="bar_table" class="table table-bordered" style="width:100%">
                   <thead>
                      <tr>
                         <th>Nama Suplier</th>
+                        <th>Kategori Barang</th>
                         <th>Nama Barang</th>
                         <th>Merk Barang</th>
                         <th>Harga Satuan</th>
@@ -59,7 +60,8 @@
       ajax: 'jsonbarang',
       columns:[
             { data: 'supliername' },
-            { data: 'Nama_Barang', name: 'Nama_Barang' },
+            { data: 'kategori'},
+            { data: 'parent'},
             { data: 'Merk', name: 'Merk' },
             { data: 'formatharga', name: 'formatharga' },
             { data: 'Stok', name: 'Stok'},
@@ -194,7 +196,8 @@
 
           $('#id').val(data.id);
           $('#suplier_id').val(data.suplier_id);
-          $('#Nama_Barang').val(data.Nama_Barang);
+          $('#kat_id').val(data.kat_id);
+          $('#id_parent').val(data.id_parent);
           $('#Merk').val(data.Merk);
           $('#Harga_Satuan').val(data.Harga_Satuan);
           $('#Stok').val(data.Stok);
@@ -242,6 +245,28 @@
           return false;
         }
       });
+    $(document).ready(function() {
+        $('select[name="kat_id"]').on('change', function() {
+            var katID = $(this).val();
+            if(katID) {
+                $.ajax({
+                    url: '/myform/ajax/'+katID,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data) {
+
+                        
+                        $('select[name="id_parent"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="id_parent"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        });
+                    }
+                });
+            }else{
+                $('select[name="id_parent"]').empty();
+            }
+        });
+    });
     });
 </script>
 @endpush      

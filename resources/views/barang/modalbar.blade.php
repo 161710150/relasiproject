@@ -34,10 +34,28 @@
                      @endif
                   </div>
 
+                  <div class="form-group {{ $errors->has('kat_id') ? 'has-error' : '' }}">
+                     <input type="hidden" name="id" id="id">
+
+                     <label>Nama Kategori</label>
+                     <select class="form-control select-dua" name="kat_id" id="kat_id" style="width: 468px">
+                        <option disabled selected>Pilih Kategori</option>
+                        @foreach($barangkategori as $data)
+                        <option value="{{$data->id}}">{{$data->Nama_Kategori}}</option>
+                        @endforeach
+                     </select>
+                     @if ($errors->has('kat_id'))
+                     <span class="help-block has-error Nama_Kategori_error">
+                        <strong>{{$errors->first('kat_id')}}</strong>
+                     </span>
+                     @endif
+                  </div>
+
                   <div class="form-group">
-                  	<label>Nama Barang</label>
-                  	<input type="text" id="Nama_Barang" name="Nama_Barang" class="form-control" placeholder="masukan nama barang">
-                  	<span class="help-block has-error Nama_Barang_error"></span>
+                     <label>Nama sub kategori</label>
+                     <select name="id_parent" id="id_parent" class="form-control" style="width:468px">
+                     </select>
+                     <span class="help-block has-error id_parent_error"></span>
                   </div>
 
                   <div class="form-group">

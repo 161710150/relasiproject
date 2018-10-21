@@ -4,9 +4,25 @@ namespace App\Http\Controllers;
 
 use App\KategoriBarang;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Html\Builder;
+use Yajra\DataTables\DataTables;
 
 class KategoriBarangController extends Controller
 {
+    public function json()
+    {
+        $kategori = KategoriBarang::all();
+        return Datatables::of($kategori)
+        ->addColumn('action', function($kategori){
+            return '<a href="#" class="btn btn-xs btn-primary edit" data-id="'.$kategori->id.'">
+            <i class="glyphicon glyphicon-edit"></i> Edit</a>&nbsp;
+            <a href="#" class="btn btn-xs btn-danger delete" id="'.$kategori->id.'">
+            <i class="glyphicon glyphicon-remove"></i> Delete</a>';
+
+            })
+        ->rawColumns(['action'])->make(true);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +30,8 @@ class KategoriBarangController extends Controller
      */
     public function index()
     {
-        //
+        $kategori = KategoriBarang::where('parent_id','=',null)->get();
+        return view('kategori.index', compact('kategori'));
     }
 
     /**
@@ -35,7 +52,16 @@ class KategoriBarangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'Nama_Kategori' => 'required',
+        ],[
+            'Nama_Kategori.required' => 'Nama Kategori Tidak Boleh Kosong',
+        ]);
+        $data = new KategoriBarang;
+        $data->Nama_Kategori = $request->Nama_Kategori;
+        $data->parent_id = $request->parent_id;
+        $data->save();
+        return response()->json(['success'=>true]);
     }
 
     /**
@@ -55,9 +81,10 @@ class KategoriBarangController extends Controller
      * @param  \App\KategoriBarang  $kategoriBarang
      * @return \Illuminate\Http\Response
      */
-    public function edit(KategoriBarang $kategoriBarang)
+    public function edit($id)
     {
-        //
+        $kategori = KategoriBarang::findOrFail($id);
+        return $kategori;
     }
 
     /**
@@ -67,9 +94,18 @@ class KategoriBarangController extends Controller
      * @param  \App\KategoriBarang  $kategoriBarang
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, KategoriBarang $kategoriBarang)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'Nama_Kategori' => 'required',
+        ],[
+            'Nama_Kategori.required' => 'Nama Kategori Tidak Boleh Kosong',
+        ]);
+        $data = KategoriBarang::findOrFail($id);
+        $data->Nama_Kategori = $request->Nama_Kategori;
+        $data->parent_id = $request->parent_id;
+        $data->save();
+        return response()->json(['success'=>true]);
     }
 
     /**
@@ -81,5 +117,13 @@ class KategoriBarangController extends Controller
     public function destroy(KategoriBarang $kategoriBarang)
     {
         //
+    }
+    public function removedata(Request $request)
+    {
+        $kategori = KategoriBarang::find($request->input('id'));
+        if($kategori->delete())
+        {
+            echo 'Data Deleted';
+        }
     }
 }

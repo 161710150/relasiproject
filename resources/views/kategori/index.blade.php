@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables Suplier</h1>
+            <h1>Data Tables Kategori</h1>
           </div>
           <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -28,57 +28,57 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="suplier_table" class="table table-bordered" style="width:100%">
+              <table id="tablekat" class="table table-bordered" style="width:100%">
                   <thead>
                      <tr>
-                        <th>Nama Suplier</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Asal Kota</th>
-                        <th>Action</th>
+                      <th>Nomor Id</th>
+                      <th>Nama Kategori</th>
+                      <th>Kategori</th>
+                      <th>Action</th>
                      </tr>
                   </thead>
                </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </section>
+   </div>
 @endsection
 @push('scripts')
 
-@include('suplier.modalsuplier')
-      <script type="text/javascript">
+@include('kategori.modalkat')
+<script type="text/javascript">
          $(document).ready(function() {
 
-          $('#suplier_table').DataTable({
+          $('#tablekat').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '/jsondata',
+            ajax: '/jsonkategori',
             columns:[
-                  { data: 'Nama', name: 'Nama' },
-                  { data: 'Jenis_Kelamin', name: 'Jenis_Kelamin' },
-                  { data: 'Asal_Kota', name: 'Asal_Kota'},
+                  { data: 'id'},
+                  { data: 'Nama_Kategori', name: 'Nama_Kategori' },
+                  { data: 'parent_id', name: 'parent_id'},
                   { data: 'action', orderable: false, searchable: false }
               ],
             });
 
           $('#Tambah').click(function(){
 
-            $('#suplierModal').modal('show');
+            $('#Modalkat').modal('show');
             $('.modal-title').text('Add Data');
             $('#aksi').val('Tambah');
             $('.selectdua').select2();
             state = "insert";
 
             });
-          $('#suplierModal').on('hidden.bs.modal',function(e){
-            $(this).find('#suplier_form')[0].reset();
+          $('#Modalkat').on('hidden.bs.modal',function(e){
+            $(this).find('#formkat')[0].reset();
             $('span.has-error').text('');
             $('.form-group.has-error').removeClass('has-error');
             });
 
-          $('#suplier_form').submit(function(e){
+          $('#formkat').submit(function(e){
             $.ajaxSetup({
               header: {
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -92,7 +92,7 @@
 
               $.ajax({
                 type: "POST",
-                url: "{{url ('/store')}}",
+                url: "{{url ('/storekategori')}}",
                 data: new FormData(this),
                // data: $('#student_form').serialize(),
                 contentType: false,
@@ -107,8 +107,8 @@
                       type:'success',
                       timer:'2000'
                     });
-                  $('#suplierModal').modal('hide');
-                  $('#suplier_table').DataTable().ajax.reload();
+                  $('#Modalkat').modal('hide');
+                  $('#tablekat').DataTable().ajax.reload();
                 },
 
                 //menampilkan validasi error
@@ -138,7 +138,7 @@
                //mengupdate data yang telah diedit
               $.ajax({
                 type: "POST",
-                url: "{{url ('suplier/edit')}}"+ '/' + $('#id').val(),
+                url: "{{url ('kategori/edit')}}"+ '/' + $('#id').val(),
                 // data: $('#student_form').serialize(),
                 data: new FormData(this),
                 contentType: false,
@@ -146,14 +146,14 @@
                 dataType: 'json',
                 success: function (data){
                   console.log(data);
-                  $('#suplierModal').modal('hide');
+                  $('#Modalkat').modal('hide');
                   swal({
                     title: 'Update Success',
                     text: data.message,
                     type: 'success',
                     timer: '3500'
                   })
-                  $('#suplier_table').DataTable().ajax.reload();
+                  $('#tablekat').DataTable().ajax.reload();
                 },
                 error: function (data){
                   $('input').on('keydown keypress keyup click change', function(){
@@ -180,7 +180,7 @@
             var bebas = $(this).data('id');
             $('#form_tampil').html('');
             $.ajax({
-              url:"{{url('suplier/getedit')}}" + '/' + bebas,
+              url:"{{url('kategori/getedit')}}" + '/' + bebas,
               method:'get',
               data:{id:bebas},
               dataType:'json',
@@ -189,27 +189,17 @@
                 state = "update";
 
                 $('#id').val(data.id);
-                $('#Nama').val(data.Nama);
-                 if (data.Jenis_Kelamin == 'Laki-laki') {
-                    $('#laki').prop('checked', true);
-                  }
-                  else
-                  {
-                    $('#wanita').prop('checked', true);
-                  }
-                $('#Asal_Kota').val(data.Asal_Kota);
-                $('.selectdua').select2();
+                $('#Nama_Kategori').val(data.Nama_Kategori);
 
-
-                  $('#suplierModal').modal('show');
+                  $('#Modalkat').modal('show');
                   $('#aksi').val('Simpan');
                   $('.modal-title').text('Edit Data');
                 }
               });
           });
 
-          $(document).on('hide.bs.modal','#suplierModal', function() {
-            $('#suplier_table').DataTable().ajax.reload();
+          $(document).on('hide.bs.modal','#Modalkat', function() {
+            $('#tablekat').DataTable().ajax.reload();
           });
 
           //proses delete data
@@ -218,7 +208,7 @@
               if (confirm("Yakin Dihapus ?")) {
 
                 $.ajax({
-                  url: "{{route('ajaxdata.removedatasup')}}",
+                  url: "{{route('ajaxdata.removedatakategori')}}",
                   method: "get",
                   data:{id:bebas},
                   success: function(data){
@@ -228,7 +218,7 @@
                       type:'success',
                       timer:'1500'
                     });
-                    $('#suplier_table').DataTable().ajax.reload();
+                    $('#tablekat').DataTable().ajax.reload();
                   }
                 })
               }
@@ -243,6 +233,5 @@
               }
             });
        });
-      </script>
-
+</script>
 @endpush

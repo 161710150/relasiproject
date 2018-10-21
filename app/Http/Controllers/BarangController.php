@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Barang;
 use App\Suplier;
+use App\KategoriBarang;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\DataTables;
+use DB;
 
 class BarangController extends Controller
 {
@@ -14,6 +16,12 @@ class BarangController extends Controller
     {
         $barang = Barang::all();
         return Datatables::of($barang)
+        ->addColumn('kategori', function($barang){
+            return $barang->kategoribarang->Nama_Kategori;
+        })
+        ->addColumn('parent', function($barang){
+            return $barang->subbarang->Nama_Kategori;
+        })
         ->addColumn('supliername', function($barang){
             return $barang->suplier->Nama;
         })
@@ -27,7 +35,7 @@ class BarangController extends Controller
             <i class="glyphicon glyphicon-remove"></i> Delete</a>';
 
             })
-        ->rawColumns(['action','supliername','formatharga'])->make(true);
+        ->rawColumns(['action','supliername','formatharga','kategori','parent'])->make(true);
     }
     /**
      * Display a listing of the resource.
@@ -37,7 +45,16 @@ class BarangController extends Controller
     public function index()
     {
         $suplier = Suplier::all();
-        return view('barang.index', compact('suplier'));
+        $barangkategori = KategoriBarang::where('parent_id','=',null)->get();
+        return view('barang.index', compact('suplier','barangkategori'));
+    }
+
+    public function myformAjax($id)
+    {
+        $sub = DB::table("kategori_barangs")
+                    ->where("parent_id",$id)
+                    ->pluck("Nama_Kategori","id");
+        return json_encode($sub);
     }
 
     /**
@@ -60,13 +77,15 @@ class BarangController extends Controller
     {
         $this->validate($request, [
             'suplier_id' => 'required',
-            'Nama_Barang' => 'required',
-            'Merk' => 'required',
+            'kat_id' => 'required',
+            'id_parent' => 'required',
+            'Merk' => 'required|unique:barangs,Merk',
             'Harga_Satuan' => 'required',
             'Stok' => 'required|not_in:0',
         ],[
-            'suplier_id.required' => 'suplier_id Tidak Boleh Kosong',
-            'Nama_Barang.required' => 'Nama Barang Harus Diisi',
+            'suplier_id.required' => 'suplier Tidak Boleh Kosong',
+            'kat_id.required' => 'Kategori tidak boleh Kosong',
+            'id_parent.required' => 'Nama Barang Harus Diisi',
             'Merk.required' => 'Merk Tidak Boleh Kosong',
             'Harga_Satuan.required' => 'Harga Harus Diisi',
             'Stok.required' => 'Stok Harus Diisi',
@@ -74,7 +93,8 @@ class BarangController extends Controller
         ]);
         $data = new Barang;
         $data->suplier_id = $request->suplier_id;
-        $data->Nama_Barang = $request->Nama_Barang;
+        $data->kat_id = $request->kat_id;
+        $data->id_parent = $request->id_parent;
         $data->Merk = $request->Merk;
         $data->Harga_Satuan = $request->Harga_Satuan;
         $data->Stok = $request->Stok;
@@ -116,13 +136,15 @@ class BarangController extends Controller
     {
         $this->validate($request, [
             'suplier_id'=>'required',
-            'Nama_Barang' => 'required',
+            'kat_id' => 'required',
+            'id_parent' => 'required',
             'Merk'=>'required',
             'Harga_Satuan' => 'required',
             'Stok' => 'required|not_in:0',
         ],[
             'suplier_id.required' => 'suplier_id Tidak Boleh Kosong',
-            'Nama_Barang.required' => 'Harus Diisi',
+            'kat_id.required' => 'Harus Diisi',
+            'id_parent.required' => 'Harus Diisi',
             'Merk.required' => 'Tidak Boleh Kosong',
             'Harga_Satuan.required' => 'Tidak Boleh Kosong',
             'Stok.required' => 'Tidak Boleh Kosong',
@@ -130,7 +152,8 @@ class BarangController extends Controller
         ]);
         $barang = Barang::findOrFail($id);
         $barang->suplier_id = $request->suplier_id;
-        $barang->Nama_Barang = $request->Nama_Barang;
+        $barang->kat_id = $request->kat_id;
+        $barang->id_parent = $request->id_parent;
         $barang->Merk = $request->Merk;
         $barang->Harga_Satuan = $request->Harga_Satuan;
         $barang->Stok = $request->Stok;

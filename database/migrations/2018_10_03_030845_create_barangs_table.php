@@ -16,7 +16,8 @@ class CreateBarangsTable extends Migration
         Schema::create('barangs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('suplier_id')->unsigned();
-            $table->string('Nama_Barang');
+            $table->integer('kat_id')->unsigned();
+            $table->integer('id_parent')->unsigned();
             $table->string('Merk');
             $table->integer('Harga_Satuan');
             $table->integer('Stok')->unsigned();

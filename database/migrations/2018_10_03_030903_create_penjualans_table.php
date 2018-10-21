@@ -19,6 +19,8 @@ class CreatePenjualansTable extends Migration
             $table->date('Tanggal_Jual');
             $table->string('Nama_Pelanggan');
             $table->integer('Barang_id')->unsigned();
+            $table->integer('kat_id')->unsigned();
+            $table->integer('sub_id')->unsigned();
             $table->integer('Jumlah');
             $table->integer('Total_Bayar');
             $table->timestamps();

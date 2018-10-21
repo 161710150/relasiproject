@@ -14,6 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('kategorisub', function(){
+	return App\KategoriBarang::with('turunan')
+	->where('parent_id')
+	->get();
+});
+Route::get('myform/ajax/{id}',array('as'=>'myform.ajax','uses'=>'BarangController@myformAjax'));
 
 //suplier
 Route::get('/jsondata','SuplierController@json');
@@ -39,3 +45,11 @@ Route::post('storejual', 'PenjualanController@store');
 Route::post('jual/edit/{id}', 'PenjualanController@update');
 Route::get('jual/getedit/{id}','PenjualanController@edit');
 Route::get('ajaxdata/removedatajual','PenjualanController@removedata')->name('ajaxdata.removedatajual');
+
+//kategori
+Route::resource('kategori','KategoriBarangController');
+Route::get('/jsonkategori', 'KategoriBarangController@json');
+Route::post('storekategori', 'KategoriBarangController@store');
+Route::post('kategori/edit/{id}', 'KategoriBarangController@update');
+Route::get('kategori/getedit/{id}','KategoriBarangController@edit');
+Route::get('ajaxdata/removedatakategori','KategoriBarangController@removedata')->name('ajaxdata.removedatakategori');

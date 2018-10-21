@@ -35,17 +35,34 @@
                      <input type="text" name="Nama_Pelanggan" id="Nama_Pelanggan" class="form-control" placeholder="masukan nama anda">
                      <span class="help-block has-error Nama_Pelanggan_error"></span>
                   </div>
-               
-                  <div class="form-group {{ $errors->has('Barang_id') ? 'has-error' : '' }}">
 
-                     <label>Barang Id</label>
-                     <select class="form-control select-dua" name="Barang_id" id="Barang_id" style="width: 468px">
-                     	<option disabled selected>Pilih Barang</option>
-                     	@foreach($barang as $data)
-                     	<option value="{{$data->id}}">{{$data->Nama_Barang}}</option>
-                     	@endforeach
+                  <div class="form-group {{ $errors->has('kat_id') ? 'has-error' : '' }}">
+                     <label>Kategori Barang</label>
+                     <select class="form-control select-dua" name="kat_id" id="kat_id" style="width: 468px">
+                        <option disabled selected>Pilih kategori Barang</option>
+                        @foreach($barkategori as $data)
+                        <option value="{{$data->id}}">{{$data->Nama_Kategori}}</option>
+                        @endforeach
                      </select>
-                     <span class="help-block has-error Nama_Barang_error">
+                     <span class="help-block has-error Nama_Kategori_error">
+                  </div>
+
+                  <div class="form-group">
+                     <label>Nama sub kategori</label>
+                     <select name="sub_id" id="sub_id" class="form-control" style="width:468px">
+                     </select>
+                     <span class="help-block has-error id_parent_error"></span>
+                  </div>
+
+                  <div class="form-group {{ $errors->has('Barang_id') ? 'has-error' : '' }}">
+                     <label>Barang</label>
+                     <select class="form-control select-dua" name="Barang_id" id="Barang_id" style="width: 468px">
+                        <option disabled selected>Pilih kategori Barang</option>
+                        @foreach($barang as $data)
+                        <option value="{{$data->id}}">{{$data->Merk}}</option>
+                        @endforeach
+                     </select>
+                     <span class="help-block has-error Nama_Kategori_error">
                   </div>
 
                   <div class="form-group">
