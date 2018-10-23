@@ -52,7 +52,7 @@
                   </div>
 
                   <div class="form-group">
-                     <label>Nama sub kategori</label>
+                     <label>Nama Barang Berdasarkan Kategori</label>
                      <select name="id_parent" id="id_parent" class="form-control" style="width:468px">
                      </select>
                      <span class="help-block has-error id_parent_error"></span>

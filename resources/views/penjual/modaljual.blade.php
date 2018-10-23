@@ -48,21 +48,21 @@
                   </div>
 
                   <div class="form-group">
-                     <label>Nama sub kategori</label>
+                     <label>Nama Barang Berdasarkan Kategori</label>
                      <select name="sub_id" id="sub_id" class="form-control" style="width:468px">
                      </select>
-                     <span class="help-block has-error id_parent_error"></span>
+                     <span class="help-block has-error sub_id_error"></span>
                   </div>
 
                   <div class="form-group {{ $errors->has('Barang_id') ? 'has-error' : '' }}">
-                     <label>Barang</label>
+                     <label>Merk Barang</label>
                      <select class="form-control select-dua" name="Barang_id" id="Barang_id" style="width: 468px">
                         <option disabled selected>Pilih kategori Barang</option>
                         @foreach($barang as $data)
                         <option value="{{$data->id}}">{{$data->Merk}}</option>
                         @endforeach
                      </select>
-                     <span class="help-block has-error Nama_Kategori_error">
+                     <span class="help-block has-error Merk_error">
                   </div>
 
                   <div class="form-group">

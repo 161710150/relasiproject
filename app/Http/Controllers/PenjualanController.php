@@ -8,6 +8,7 @@ use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\DataTables;
 use App\Barang;
 use App\KategoriBarang;
+use DB;
 
 class PenjualanController extends Controller
 {
@@ -33,7 +34,7 @@ class PenjualanController extends Controller
             <a href="#" class="btn btn-xs btn-danger delete" id="'.$jual->id.'">
             <i class="glyphicon glyphicon-remove"></i> Delete</a>';
         })
-        ->rawColumns(['action','jual','formatharga','kategori','sub'])->make(true);
+        ->rawColumns(['action','jual','formatharga','kategori','subbar'])->make(true);
     }
     /**
      * Display a listing of the resource.
@@ -73,6 +74,7 @@ class PenjualanController extends Controller
             'Nama_Pelanggan' => 'required',
             'Barang_id' => 'required',
             'kat_id' => 'required',
+            'sub_id' => 'required',
             'Jumlah' => "required|numeric|min:1|max:$stok",
         ],[
             'Kode_Penjualan.required' => 'Kode Penjualan Tidak Boleh Kosong',
@@ -82,6 +84,7 @@ class PenjualanController extends Controller
             'Nama_Pelanggan.required' => 'Nama Pelanggan Tidak Boleh Kosong',
             'Barang_id.required' => 'Harga Harus Diisi',
             'kat_id.required' => 'Harus Diisi',
+            'sub_id.required' => 'Harus Diisi',
             'Jumlah.required' => 'Jumlah Harus Diisi',
             'Jumlah.max' => 'tidak boleh melebihi stok, Stok Barang Saat Ini = '.$stok,
             'Jumlah.min' => 'tidak boleh kurang dari 1',
@@ -143,6 +146,7 @@ class PenjualanController extends Controller
             'Nama_Pelanggan' => 'required',
             'Barang_id' => 'required',
             'kat_id' => 'required',
+            'sub_id' => 'required',
             'Jumlah' => 'required|numeric|not_in:0',
         ],[
             'Kode_Penjualan.required' => 'Kode Penjualan Tidak Boleh Kosong',
@@ -150,6 +154,7 @@ class PenjualanController extends Controller
             'Nama_Pelanggan.required' => 'Nama Pelanggan Tidak Boleh Kosong',
             'Barang_id.required' => 'Harga Harus Diisi',
             'kat_id.required' => 'Harus Diisi',
+            'sub_id.required' => 'Harus Diisi',
             'Jumlah.required' => 'Jumlah Harus Diisi',
             'Jumlah.numeric' => 'inputan Harus berupa angka',
             'Jumlah.not_in' => 'tidak bisa menginput',
@@ -160,6 +165,7 @@ class PenjualanController extends Controller
         $data->Nama_Pelanggan = $request->Nama_Pelanggan;
         $data->Barang_id = $request->Barang_id;
         $data->kat_id = $request->kat_id;
+        $data->sub_id = $request->sub_id;
 
         $baru = Barang::find($id);
         if ($request->Jumlah <= $baru->Stok) {

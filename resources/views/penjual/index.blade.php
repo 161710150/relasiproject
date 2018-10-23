@@ -8,14 +8,8 @@
           <div class="col-sm-6">
             <h1>Data Tables Penjualan</h1>
           </div>
-          <!-- <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Data Tables</li>
-            </ol>
-          </div> -->
         </div>
-      </div><!-- /.container-fluid -->
+      </div>
     </section>
 
     <!-- Main content -->
@@ -33,7 +27,8 @@
                           <th>Kode Penjualan</th>
                           <th>Tanggal Jual</th>
                           <th>Nama Pelanggan</th>
-                          <th>Barang</th>
+                          <th>Nama Barang</th>
+                          <th>Merk Barang</th>
                           <th>Kategori Barang</th>
                           <th>Jumlah Pesanan</th>
                           <th>Total Yang Harus Dibayar</th>
@@ -62,6 +57,7 @@
                   { data: 'Kode_Penjualan', name: 'Kode_Penjualan' },
                   { data: 'Tanggal_Jual', name: 'Tanggal_Jual' },
                   { data: 'Nama_Pelanggan', name: 'Nama_Pelanggan'},
+                  { data: 'subbar'},
                   { data: 'jual' },
                   { data: 'kategori'},
                   { data: 'Jumlah', name: 'Jumlah' },
@@ -208,6 +204,7 @@
                 $('#Nama_Pelanggan').val(data.Nama_Pelanggan);
                 $('#Barang_id').val(data.Barang_id);
                 $('#kat_id').val(data.kat_id);
+                $('#sub_id').val(data.sub_id);
                 $('#Jumlah').val(data.Jumlah);
                 $('.select-dua').select2();
 
@@ -253,28 +250,28 @@
                 return false;
               }
             });
-          $(document).ready(function() {
-        $('select[name="kat_id"]').on('change', function() {
-            var katID = $(this).val();
-            if(katID) {
-                $.ajax({
-                    url: '/myform/ajax/'+katID,
-                    type: "GET",
-                    dataType: "json",
-                    success:function(data) {
 
-                        
-                        $('select[name="sub_id"]').empty();
-                        $.each(data, function(key, value) {
-                            $('select[name="sub_id"]').append('<option value="'+ key +'">'+ value +'</option>');
-                        });
-                    }
+          $(document).ready(function() {
+            $('select[name="kat_id"]').on('change', function() {
+              var katID = $(this).val();
+              if(katID) {
+                $.ajax({
+                  url: '/myformjual/ajax/'+katID,
+                  type: "GET",
+                  dataType: "json",
+                  success:function(data) {
+
+                    $('select[name="sub_id"]').empty();
+                    $.each(data, function(key, value) {
+                      $('select[name="sub_id"]').append('<option value="'+ key +'">'+ value +'</option>');
+                    });
+                  }
                 });
-            }else{
+              }else{
                 $('select[name="sub_id"]').empty();
-            }
+              }
+            });
+          });
         });
-    });
-       });
-      </script>
-      @endpush
+</script>
+@endpush

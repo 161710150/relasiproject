@@ -32,8 +32,8 @@
                   <thead>
                      <tr>
                       <th>Nomor Id</th>
-                      <th>Nama Kategori</th>
-                      <th>Kategori</th>
+                      <th>Nama Barang dan Kategori</th>
+                      <th>Berdasarkan Kategori Id</th>
                       <th>Action</th>
                      </tr>
                   </thead>
